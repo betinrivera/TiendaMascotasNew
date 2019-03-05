@@ -24,7 +24,7 @@
                         {{Session::get('error')}}
                     </div>
                 @endif
-                <form method="POST" 
+                <form method="POST"  id="frmActualizarPerfil"
                     action="{{route('perfil.update',$usuario->id)}}"
                     enctype="multipart/form-data">
                     @csrf
@@ -37,13 +37,14 @@
                         <label>Correo</label>
                         <input type="text" class="form-control" value="{{$usuario->email}}" readonly>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group grupo-password">
                         <label>Contraseña</label>
-                        <input name="password" type="password" class="form-control" >
+                        <input name="password" type="password" class="form-control" id="txtContrasena" >
                     </div>
-                    <div class="form-group">
+                    <div class="form-group grupo-password">
                         <label>Confirmar contraseña</label>
-                        <input type="password" class="form-control" >
+                        <input type="password" class="form-control" id="txtConfirmarContrasena">
+                        <span class="help-block" id="spnPasswordNoCoincide">Contraseñas no coinciden</span>
                     </div>
                     <div class="form-group">
                         <label>Foto</label>
@@ -57,11 +58,35 @@
                         @endif
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <button type="button" id="btnActualizar" class="btn btn-primary" id="btnActuaizar">Actualizar</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    function doClickactualizar(event){
+        if($("#txtContrasena").val() == $("#txtConfirmarContrasena").val() ){
+            //Envio el formulario
+            $("#frmActualizarPerfil").submit();
+        }
+        else {
+            //Mostrar errores
+            $("#spnPasswordNoCoincide").show();
+            $(".grupo-password").addClass('has-error');
+        }
+
+    }
+
+
+    $(function() {
+            $("#spnPasswordNoCoincide").hide();
+            $("#btnActualizar").click(doClickactualizar);
+
+    });
+</script>
 @endsection
